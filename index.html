@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Studies & Geography Vocabulary</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Load Inter Font, Noto Sans KR, SC, JP for multilingual support */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Inter', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+        }
+
+        /* Styles for 3D flip effect */
+        .card-container {
+            perspective: 1000px; /* Perspective for 3D effect */
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.7s;
+            transform-style: preserve-3d;
+        }
+
+        /* Flip the card 180 degrees on the Y-axis when 'is-flipped' class is added */
+        .card-container.is-flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden; /* Hide the back side */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 1.5rem; /* 24px */
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            padding: 2rem; /* 32px */
+        }
+
+        .card-front {
+            background-color: white;
+            color: #111827; /* gray-900 */
+            border: 2px solid #E5E7EB;
+        }
+
+        .card-back {
+            background-color: #4F46E5; /* Indigo-600 */
+            color: white;
+            transform: rotateY(180deg); /* Pre-rotate the back side */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col justify-center items-center p-4">
+
+    <div class="w-full max-w-md mx-auto">
+        <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-6">
+            Social Studies & Geography
+        </h1>
+
+        <!-- Flashcard Container -->
+        <div id="flashcard-container" class="card-container w-full h-80 md:h-96 rounded-3xl cursor-pointer">
+            <div id="flashcard-inner" class="card-inner w-full h-full">
+                
+                <!-- Card Front (English Word) -->
+                <div class="card-front">
+                    <div id="card-front-content" class="text-center w-full">
+                        <p class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-2">English Term</p>
+                        <h2 id="english-word" class="text-4xl md:text-5xl font-extrabold text-gray-800 break-words px-2">
+                            Geography
+                        </h2>
+                        <p class="text-gray-400 mt-6 text-sm animate-pulse">
+                            (Click to flip)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card Back (Translations) -->
+                <div class="card-back">
+                    <div id="card-back-content" class="text-left w-full space-y-5 px-4">
+                        <div class="border-b border-indigo-400 pb-2">
+                            <span class="block text-xs text-indigo-200 uppercase font-bold mb-1">🇰🇷 Korean</span>
+                            <span id="korean-word" class="text-2xl font-bold">지리</span>
+                        </div>
+                        <div class="border-b border-indigo-400 pb-2">
+                            <span class="block text-xs text-indigo-200 uppercase font-bold mb-1">🇨🇳 Mandarin</span>
+                            <span id="mandarin-word" class="text-2xl font-bold">地理 (dì lǐ)</span>
+                        </div>
+                        <div>
+                            <span class="block text-xs text-indigo-200 uppercase font-bold mb-1">🇯🇵 Japanese</span>
+                            <span id="japanese-word" class="text-2xl font-bold">地理 (chiri)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Counter -->
+        <div id="card-counter" class="text-center text-gray-500 mt-6 text-lg font-medium">
+            Card 1 / 55
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between mt-6 space-x-4 w-full max-w-md">
+            <button id="prev-btn" class="flex-1 bg-white hover:bg-gray-100 text-gray-800 font-bold py-3 px-6 rounded-xl shadow-sm border border-gray-200 transition-colors duration-200 flex items-center justify-center gap-2">
+                <span>←</span> Previous
+            </button>
+            <button id="next-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-md transition-colors duration-200 flex items-center justify-center gap-2">
+                Next <span>→</span>
+            </button>
+        </div>
+
+        <!-- Shuffle Button -->
+        <div class="mt-4 w-full max-w-md">
+            <button id="shuffle-btn" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-xl shadow-md transition-colors duration-200 flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Shuffle Cards
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Vocabulary list data
+        const vocabulary = [
+            { english: "geography", korean: "지리", mandarin: "地理 (dì lǐ)", japanese: "地理 (chiri)" },
+            { english: "identify", korean: "확인하다, 식별하다", mandarin: "识别 (shí bié)", japanese: "特定する (tokutei suru)" },
+            { english: "affect", korean: "영향을 미치다", mandarin: "影响 (yǐng xiǎng)", japanese: "影響する (eikyō suru)" },
+            { english: "environment", korean: "환경", mandarin: "环境 (huán jìng)", japanese: "環境 (kankyō)" },
+            { english: "describe", korean: "묘사하다, 설명하다", mandarin: "描述 (miáo shù)", japanese: "描写する (byōsha suru)" },
+            { english: "climate", korean: "기후", mandarin: "气候 (qì hòu)", japanese: "気候 (kikō)" },
+            { english: "liberty", korean: "자유", mandarin: "自由 (zì yóu)", japanese: "自由 (jiyū)" },
+            { english: "population", korean: "인구", mandarin: "人口 (rén kǒu)", japanese: "人口 (jinkō)" },
+            { english: "culture", korean: "문화", mandarin: "文化 (wén huà)", japanese: "文化 (bunka)" },
+            { english: "highway", korean: "고속도로", mandarin: "公路 (gōng lù)", japanese: "高速道路 (kōsoku dōro)" },
+            { english: "government", korean: "정부", mandarin: "政府 (zhèng fǔ)", japanese: "政府 (seifu)" },
+            { english: "physical", korean: "물리적인, 자연의", mandarin: "物理的 (wù lǐ de)", japanese: "物理的な (butsuriteki na)" },
+            { english: "feature, trait", korean: "특징, 특성", mandarin: "特征 (tè zhēng)", japanese: "特徴 (tokuchō)" },
+            { english: "interpret", korean: "해석하다", mandarin: "解释 (jiě shì)", japanese: "解釈する (kaishaku suru)" },
+            { english: "encyclopedia", korean: "백과사전", mandarin: "百科全书 (bǎi kē quán shū)", japanese: "百科事典 (hyakka jiten)" },
+            { english: "artifact", korean: "유물, 인공물", mandarin: "文物 (wén wù)", japanese: "人工遺物 (jinkō ibutsu)" },
+            { english: "profile", korean: "개요, 프로필", mandarin: "轮廓 (lún kuò)", japanese: "プロフィール (purofīru)" },
+            { english: "symbol", korean: "상징", mandarin: "象征 (xiàng zhēng)", japanese: "象徴 (shōchō)" },
+            { english: "landmark", korean: "주요 지형지물, 랜드마크", mandarin: "地标 (dì biāo)", japanese: "ランドマーク (randomāku)" },
+            { english: "landform", korean: "지형", mandarin: "地貌 (dì mào)", japanese: "地形 (chikei)" },
+            { english: "characteristic", korean: "특징", mandarin: "特征 (tè zhēng)", japanese: "特徴 (tokuchō)" },
+            { english: "depend on", korean: "~에 의존하다", mandarin: "依赖 (yī lài)", japanese: "依存する (izon suru)" },
+            { english: "adapt", korean: "적응하다", mandarin: "适应 (shì yìng)", japanese: "適応する (tekiō suru)" },
+            { english: "economy", korean: "경제", mandarin: "经济 (jīng jì)", japanese: "経済 (keizai)" },
+            { english: "factor", korean: "요인", mandarin: "因素 (yīn sù)", japanese: "要因 (yōin)" },
+            { english: "refugee", korean: "난민", mandarin: "难民 (nàn mín)", japanese: "難民 (nanmin)" },
+            { english: "ancestor", korean: "조상", mandarin: "祖先 (zǔ xiān)", japanese: "先祖 (senzo)" },
+            { english: "citizen", korean: "시민", mandarin: "公民 (gōng mín)", japanese: "市民 (shimin)" },
+            { english: "immigrate", korean: "이민 오다", mandarin: "移民 (yí mín)", japanese: "移住する (ijū suru)" },
+            { english: "migrate", korean: "이주하다, 이동하다", mandarin: "迁移 (qiān yí)", japanese: "移動する (idō suru)" },
+            { english: "politic", korean: "정치적인", mandarin: "政治的 (zhèng zhì de)", japanese: "政治的な (seijiteki na)" },
+            { english: "social", korean: "사회적인", mandarin: "社会的 (shè huì de)", japanese: "社会的な (shakaiteki na)" },
+            { english: "boundary", korean: "경계", mandarin: "边界 (biān jiè)", japanese: "境界 (kyōkai)" },
+            { english: "infrastructure", korean: "기반 시설, 인프라", mandarin: "基础设施 (jī chǔ shè shī)", japanese: "インフラ (infura)" },
+            { english: "density", korean: "밀도", mandarin: "密度 (mì dù)", japanese: "密度 (mitsudo)" },
+            { english: "settlement", korean: "정착지", mandarin: "定居点 (dìng jū diǎn)", japanese: "集落 (shūraku)" },
+            { english: "determine", korean: "결정하다", mandarin: "决定 (jué dìng)", japanese: "決定する (kettei suru)" },
+            { english: "influence", korean: "영향", mandarin: "影响 (yǐng xiǎng)", japanese: "影響 (eikyō)" },
+            { english: "information", korean: "정보", mandarin: "信息 (xìn xī)", japanese: "情報 (jōhō)" },
+            { english: "tradition", korean: "전통", mandarin: "传统 (chuán tǒng)", japanese: "伝統 (dentō)" },
+            { english: "element", korean: "요소", mandarin: "元素 (yuán sù)", japanese: "要素 (yōso)" },
+            { english: "contrast", korean: "대조", mandarin: "对比 (duì bǐ)", japanese: "対照 (taishō)" },
+            { english: "similarity", korean: "유사성", mandarin: "相似性 (xiāng sì xìng)", japanese: "類似性 (ruijisei)" },
+            { english: "define", korean: "정의하다", mandarin: "定义 (dìng yì)", japanese: "定義する (teigi suru)" },
+            { english: "function", korean: "기능", mandarin: "功能 (gōng néng)", japanese: "機能 (kinō)" },
+            { english: "natural resources", korean: "천연자원", mandarin: "自然资源 (zì rán zī yuán)", japanese: "天然資源 (tennen shigen)" },
+            { english: "perceptual", korean: "지각의", mandarin: "知觉的 (zhī jué de)", japanese: "知覚の (chikaku no)" },
+            { english: "relative", korean: "상대적인", mandarin: "相对的 (xiāng duì de)", japanese: "相対的な (sōtaiteki na)" },
+            { english: "absolute", korean: "절대적인", mandarin: "绝对的 (jué duì de)", japanese: "絶対的な (zettaiteki na)" },
+            { english: "longitude", korean: "경도", mandarin: "经度 (jīng dù)", japanese: "経度 (keido)" },
+            { english: "latitude", korean: "위도", mandarin: "纬度 (wěi dù)", japanese: "緯度 (ido)" },
+            { english: "protect", korean: "보호하다", mandarin: "保护 (bǎo hù)", japanese: "保護する (hogo suru)" },
+            { english: "condition", korean: "조건, 상태", mandarin: "条件 (tiáo jiàn)", japanese: "条件 (jōken)" },
+            { english: "permanently", korean: "영구적으로", mandarin: "永久地 (yǒng jiǔ de)", japanese: "永久に (eikyū ni)" }
+        ];
+
+        let currentCardIndex = 0;
+        let shuffledVocabulary = [...vocabulary]; // Clone the original array
+
+        // Get DOM elements
+        const cardContainer = document.getElementById('flashcard-container');
+        const englishWordEl = document.getElementById('english-word');
+        const koreanWordEl = document.getElementById('korean-word');
+        const mandarinWordEl = document.getElementById('mandarin-word');
+        const japaneseWordEl = document.getElementById('japanese-word');
+        const cardCounterEl = document.getElementById('card-counter');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const shuffleBtn = document.getElementById('shuffle-btn');
+
+        // Function to load card content
+        function loadCard(index) {
+            if (index < 0 || index >= shuffledVocabulary.length) return;
+
+            currentCardIndex = index;
+            const cardData = shuffledVocabulary[index];
+
+            // Card Front
+            englishWordEl.textContent = cardData.english;
+
+            // Card Back
+            koreanWordEl.textContent = cardData.korean;
+            mandarinWordEl.textContent = cardData.mandarin;
+            japaneseWordEl.textContent = cardData.japanese;
+
+            // Update counter 
+            cardCounterEl.textContent = `Card ${index + 1} / ${shuffledVocabulary.length}`;
+
+            // Reset card to front face
+            cardContainer.classList.remove('is-flipped');
+        }
+
+        // Function to flip card
+        function flipCard() {
+            cardContainer.classList.toggle('is-flipped');
+        }
+
+        // Show next card
+        function nextCard() {
+            const nextIndex = (currentCardIndex + 1) % shuffledVocabulary.length;
+            loadCard(nextIndex);
+        }
+
+        // Show previous card
+        function prevCard() {
+            const prevIndex = (currentCardIndex - 1 + shuffledVocabulary.length) % shuffledVocabulary.length;
+            loadCard(prevIndex);
+        }
+
+        // Shuffle cards (Fisher-Yates algorithm)
+        function shuffleCards() {
+            let m = shuffledVocabulary.length, t, i;
+            while (m) {
+                i = Math.floor(Math.random() * m--);
+                t = shuffledVocabulary[m];
+                shuffledVocabulary[m] = shuffledVocabulary[i];
+                shuffledVocabulary[i] = t;
+            }
+            loadCard(0);
+        }
+
+        // Event Listeners
+        cardContainer.addEventListener('click', flipCard);
+        nextBtn.addEventListener('click', nextCard);
+        prevBtn.addEventListener('click', prevCard);
+        shuffleBtn.addEventListener('click', shuffleCards);
+
+        // On page load, shuffle and display the first card
+        shuffleCards();
+        loadCard(0);
+    </script>
+</body>
+</html>
